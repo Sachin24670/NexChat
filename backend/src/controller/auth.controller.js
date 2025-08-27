@@ -86,3 +86,22 @@ export const logout = async(req,res)=>{
      console.log("Internal Server Error");
   }
 }
+
+export const getUserInfo = async (req, res) => {
+  try {
+    const userData = await User.findById(req.userId)
+    if(!userData){
+      return res.status(200).json({message:"Invalid Credentials"})
+    }
+    return res.status(200).json({
+        UserId:userData._id,
+        email:userData.email,
+        firstName:userData.firstName,
+        lastName:userData.lastName,
+        profileSetup : userData.profileSetup   
+    });
+  } catch (error) {
+    console.log(`Internal Error ${error}`);
+    res.status(500).json({ message: `Internal Server Error` });
+  }
+};

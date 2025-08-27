@@ -6,7 +6,7 @@ const Profile = () => {
   return (
     <div>
       Profile:
-      {/* email:{userInfo.email} */}
+      email:{userInfo.email}
     </div>
   )
 }
