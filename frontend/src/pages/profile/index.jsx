@@ -1,5 +1,5 @@
 import { useAppstore } from '@/store'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import {IoArrowBack} from "react-icons/io5"
@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { apiClient } from '@/lib/api.client'
-import { UPDATE_PROFILE_ROUTE } from '@/lib/constants'
+import { UPDATE_PROFILE_IMAGE_ROUTE, UPDATE_PROFILE_ROUTE } from '@/lib/constants'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -48,18 +48,53 @@ const Profile = () => {
     }
 
   }
+  const handleNavigate = ()=>{
+    if(userInfo.profileSetup){
+      navigate("/chat")
+    }else{
+      toast.error("PLease Setup the Profile")
+    }
+
+  }
+  const fileInputRef = useRef(null)
 
   React.useEffect(() => {
     setFirstName(userInfo.firstName || "");
     setLastName(userInfo.lastName || "");
   }, [userInfo]);
 
+  const handleFileInputClick = ()=>{
+    fileInputRef.current.click()
+  }
+
+  const handleImageChange = async(event)=>{
+    const file = event.target.files[0]
+    if(file){
+      const formData = new FormData()
+      formData.append("profile-image",file)
+      const response = await apiClient.post(UPDATE_PROFILE_IMAGE_ROUTE, formData , {withCredentials:true})
+      if (response.status === 200 && response.data.image) {
+        setUserInfo({ ...userInfo, image: response.data.image });
+        toast.success("Image Update Successfully")
+      }
+      
+    }
+
+    }
+
+  const handleDeleteImage = async(event)=>{
+
+  }
+
 
   return (
     <div className="h-[100vh] bg-zinc-800 flex items-center justify-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
         <div>
-          <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer" />
+          <IoArrowBack
+            className="text-4xl lg:text-6xl text-white/90 cursor-pointer"
+            onClick={handleNavigate}
+          />
           <div className="grid grid-cols-2">
             <div
               className="h-full w-32 md:w-48 md:h-48 relative flex items-center justify-center"
@@ -88,7 +123,10 @@ const Profile = () => {
                 )}
               </Avatar>
               {hovered && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full cursor-pointer">
+                <div
+                  className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full cursor-pointer"
+                  onClick={image ? handleDeleteImage : handleFileInputClick}
+                >
                   {image ? (
                     <FaTrash className="text-white text-3xl cursor-pointer" />
                   ) : (
@@ -96,7 +134,14 @@ const Profile = () => {
                   )}
                 </div>
               )}
-              {/* <input type="text" /> */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleImageChange}
+                name="profile-image"
+                accept=".png, .jpg, .jpeg, .svg, .webp"
+              />
             </div>
             <div className="flex min-w-32 md:min-win-64 flex-col gap-5 text-white items-center justify-center">
               <div className="w-full">
