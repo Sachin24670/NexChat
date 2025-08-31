@@ -17,7 +17,7 @@ const Profile = () => {
   const {userInfo,setUserInfo} = useAppstore()
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
-  const [image, setImage] = useState(null)
+  const [profileImage, setProfileImage] = useState(null)
   const [hovered, setHovered] = useState(false)
 
   const validateProfile = ()=>{
@@ -63,7 +63,7 @@ useEffect(() => {
     setFirstName(userInfo.firstName || "");
     setLastName(userInfo.lastName || "");
   }if(userInfo.profileImage){
-    setImage(`${HOST}/${userInfo.profileImage}`)
+    setProfileImage(`${HOST}/${userInfo.profileImage}`)
   }
   
 
@@ -81,8 +81,8 @@ useEffect(() => {
       const response = await apiClient.post(UPDATE_PROFILE_IMAGE_ROUTE, formData , {withCredentials:true})
       console.log(response)
       if (response.status === 200 && response.data.profileImage) {
-        setUserInfo({ ...userInfo, profileImage: response.data.profileImage });
-        console.log(userInfo.profileImage)
+         setUserInfo({ ...userInfo, profileImage: response.data.profileImage });
+         setProfileImage(response.data.profileImage); 
         toast.success("Image Update Successfully")
       }}
 
@@ -111,9 +111,9 @@ useEffect(() => {
               }}
             >
               <Avatar className="h-32 w-32 md:w-48 md:h-48 rounded-full overflow-hidden">
-                {image ? (
+                {profileImage ? (
                   <AvatarImage
-                    src={image}
+                    src={profileImage}
                     alt="profile"
                     className="object-cover w-full h-full bg-black"
                   />
@@ -132,9 +132,11 @@ useEffect(() => {
               {hovered && (
                 <div
                   className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full cursor-pointer"
-                  onClick={image ? handleDeleteImage : handleFileInputClick}
+                  onClick={
+                    profileImage ? handleDeleteImage : handleFileInputClick
+                  }
                 >
-                  {image ? (
+                  {profileImage ? (
                     <FaTrash className="text-white text-3xl cursor-pointer" />
                   ) : (
                     <FaPlus className="text-white text-3xl cursor-pointer" />
