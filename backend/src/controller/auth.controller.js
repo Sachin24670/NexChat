@@ -1,6 +1,7 @@
 import User from "../model/User.model.js";
 import { generateToken } from "../utils/token.util.js";
 import bcrypt from "bcrypt";
+import {renameSync, unlinkSync} from "fs"
 
 export const signup = async (req, res) => {
   const { email, firstName, lastName, password, profilePic } = req.body;
@@ -98,7 +99,8 @@ export const getUserInfo = async (req, res) => {
         email:userData.email,
         firstName:userData.firstName,
         lastName:userData.lastName,
-        profileSetup : userData.profileSetup   
+        profileSetup : userData.profileSetup,
+        profileImage: userData.profileImage
     });
   } catch (error) {
     console.log(`Internal Error ${error}`);
@@ -129,5 +131,59 @@ export const updateProfile = async (req, res) => {
   } catch (error) {
     console.log(`Internal Error ${error}`);
     res.status(500).json({ message: `Internal Server Error` });
+  }
+};
+
+export const updateProfileImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "File is required" });
+    }
+
+    const currDate = Date.now();
+    const filename = "uploads/profiles/"+currDate + req.file.originalname;
+
+    renameSync(req.file.path, filename);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.userId,
+      { profileImage: filename },
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      profileImage: updatedUser.profileImage,
+    });
+  } catch (error) {
+    console.error(`Internal Error: ${error}`);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const removeProfileImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "File is required" });
+    }
+
+    const currDate = Date.now();
+    const filename = "uploads/profiles/" + currDate + req.file.originalname;
+
+    renameSync(req.file.path, filename);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.userId,
+      { profileImage: filename },
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      profileImage: updatedUser.profileImage,
+    });
+  } catch (error) {
+    console.error(`Internal Error: ${error}`);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };

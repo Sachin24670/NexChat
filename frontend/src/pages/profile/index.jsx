@@ -1,7 +1,7 @@
 import { useAppstore } from '@/store'
 import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {IoArrowBack} from "react-icons/io5"
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar'
 import  {getColor } from '@/lib/utils'
@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { apiClient } from '@/lib/api.client'
-import { UPDATE_PROFILE_IMAGE_ROUTE, UPDATE_PROFILE_ROUTE } from '@/lib/constants'
+import { HOST, UPDATE_PROFILE_IMAGE_ROUTE, UPDATE_PROFILE_ROUTE } from '@/lib/constants'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -58,10 +58,16 @@ const Profile = () => {
   }
   const fileInputRef = useRef(null)
 
-  React.useEffect(() => {
+useEffect(() => {
+  if (userInfo.profileSetup) {
     setFirstName(userInfo.firstName || "");
     setLastName(userInfo.lastName || "");
-  }, [userInfo]);
+  }if(userInfo.profileImage){
+    setImage(`${HOST}/${userInfo.profileImage}`)
+  }
+  
+
+}, [userInfo]);
 
   const handleFileInputClick = ()=>{
     fileInputRef.current.click()
@@ -73,12 +79,13 @@ const Profile = () => {
       const formData = new FormData()
       formData.append("profile-image",file)
       const response = await apiClient.post(UPDATE_PROFILE_IMAGE_ROUTE, formData , {withCredentials:true})
-      if (response.status === 200 && response.data.image) {
-        setUserInfo({ ...userInfo, image: response.data.image });
+      console.log(response)
+      if (response.status === 200 && response.data.profileImage) {
+        setUserInfo({ ...userInfo, profileImage: response.data.profileImage });
+        console.log(userInfo.profileImage)
         toast.success("Image Update Successfully")
-      }
-      
-    }
+      }}
+
 
     }
 

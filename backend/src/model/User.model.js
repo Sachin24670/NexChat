@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
   },
   lastName: {
     type: String,
-  },profilePic:{
+  },profileImage:{
     type:String
   },profileSetup:{
     type:Boolean,
