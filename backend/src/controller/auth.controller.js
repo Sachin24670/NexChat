@@ -163,27 +163,24 @@ export const updateProfileImage = async (req, res) => {
 
 export const removeProfileImage = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "File is required" });
+    const userID = req.userId;
+    const user = await User.findById(userID)
+    if(!user){
+      return res.status(400).json("User not found")
+    }
+    if(user){
+      unlinkSync(user.profileImage)
     }
 
-    const currDate = Date.now();
-    const filename = "uploads/profiles/" + currDate + req.file.originalname;
-
-    renameSync(req.file.path, filename);
-
-    const updatedUser = await User.findByIdAndUpdate(
-      req.userId,
-      { profileImage: filename },
-      { new: true, runValidators: true }
-    );
+    user.profileImage = null
+    await user.save()
 
     return res.status(200).json({
-      success: true,
-      profileImage: updatedUser.profileImage,
+      success:true,
+      message:"Profile image Deleted Successfully"
     });
   } catch (error) {
-    console.error(`Internal Error: ${error}`);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.log(`Internal Error ${error}`);
+    res.status(500).json({ message: `Internal Server Error` });
   }
 };
