@@ -1,5 +1,7 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge"
+import animationData from "@/assets/gradient-loader.json";
+
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -28,3 +30,9 @@ export const getColor = (name) => {
   const index = getNameIndex(name);
   return colors[index] || colors[0]; // fallback
 };
+
+export const animationDefaultOptions ={
+  loop:true,
+  autoplay:true,
+  animationData
+}
