@@ -1,35 +1,93 @@
+
+// export const Logo = () => {
+//   return (
+//     <div className="flex p-5 justify-start items-center gap-3">
+//       <svg
+//         width="56"
+//         height="56"
+//         viewBox="0 0 100 100"
+//         fill="none"
+//         xmlns="http://www.w3.org/2000/svg"
+//       >
+//         {/* Chat bubble background */}
+//         <path
+//           d="M20 20C20 12.268 26.268 6 34 6H66C73.732 6 80 12.268 80 20V58C80 65.732 73.732 72 66 72H50L35 88L36 72H34C26.268 72 20 65.732 20 58V20Z"
+//           fill="url(#paint0_linear)"
+//         />
+
+//         {/* Three chat dots */}
+//         <circle cx="40" cy="45" r="5" fill="white" />
+//         <circle cx="52" cy="45" r="5" fill="white" />
+//         <circle cx="64" cy="45" r="5" fill="white" />
+
+//         {/* Gradient definition */}
+//         <defs>
+//           <linearGradient
+//             id="paint0_linear"
+//             x1="20"
+//             y1="6"
+//             x2="80"
+//             y2="88"
+//             gradientUnits="userSpaceOnUse"
+//           >
+//             <stop stopColor="#00B4D8" />
+//             <stop offset="1" stopColor="#0077B6" />
+//           </linearGradient>
+//         </defs>
+//       </svg>
+
+//       <span className="text-4xl font-semibold text-[#0077B6] tracking-tight">
+//         NexChat
+//       </span>
+//     </div>
+//   );
+// };
+
 export const Logo = () => {
   return (
-    <div className="flex p-5  justify-start items-center gap-2">
+    <div className="flex p-5 justify-start items-center gap-3">
       <svg
-        id="logo-38"
-        width="78"
-        height="32"
-        viewBox="0 0 78 32"
+        width="56"
+        height="56"
+        viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {" "}
+        {/* Chat bubble background */}
         <path
-          d="M55.5 0H77.5L58.5 32H36.5L55.5 0Z"
-          className="ccustom"
-          fill="#8338ec"
-        ></path>{" "}
-        <path
-          d="M35.5 0H51.5L32.5 32H16.5L35.5 0Z"
-          className="ccompli1"
-          fill="#975aed"
-        ></path>{" "}
-        <path
-          d="M19.5 0H31.5L12.5 32H0.5L19.5 0Z"
-          className="ccompli2"
-          fill="#a16ee8"
-        ></path>{" "}
+          d="M20 20C20 12.268 26.268 6 34 6H66C73.732 6 80 12.268 80 20V58C80 65.732 73.732 72 66 72H50L35 88L36 72H34C26.268 72 20 65.732 20 58V20Z"
+          fill="url(#paint0_linear)"
+        />
+
+        {/* Three chat dots */}
+        <circle cx="40" cy="45" r="4" fill="white" />
+        <circle cx="50" cy="45" r="4" fill="white" />
+        <circle cx="60" cy="45" r="4" fill="white" />
+
+        {/* Gradient definition */}
+        <defs>
+          <linearGradient
+            id="paint0_linear"
+            x1="20"
+            y1="6"
+            x2="80"
+            y2="88"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#00B4D8" /> {/* Vibrant Teal */}
+            <stop offset="1" stopColor="#0077B6" /> {/* Deep Blue */}
+          </linearGradient>
+        </defs>
       </svg>
-      <span className="text-3xl font-semibold ">NexChat</span>
+
+      <span className="text-4xl font-bold text-[#0077B6] tracking-tight">
+        NexChat
+      </span>
     </div>
   );
 };
+
+
 
 const Title = ({text})=>{
   return(
