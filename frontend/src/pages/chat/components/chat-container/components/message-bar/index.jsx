@@ -2,7 +2,7 @@
 const MessageBar = () => {
   return (
     <div>
-      
+      Message Bar
     </div>
   )
 }

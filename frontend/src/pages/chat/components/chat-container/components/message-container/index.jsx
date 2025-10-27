@@ -2,7 +2,7 @@
 const MessageContainer = () => {
   return (
     <div>
-      
+      Message Container
     </div>
   )
 }
