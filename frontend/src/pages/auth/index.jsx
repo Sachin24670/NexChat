@@ -148,7 +148,9 @@ const Auth = () => {
                     className="rounded-full p-5"
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <Button className="rounded-full p-5" onClick={handleLogin}>Login</Button>
+                  <Button className="rounded-full p-5" onClick={handleLogin}>
+                    Login
+                  </Button>
                 </TabsContent>
                 <TabsContent
                   value="signup"
@@ -193,9 +195,9 @@ const Auth = () => {
               </Tabs>
             </div>
           </div>
-          <div className="justify-center items-center hidden xl:flex">
-            <img src="{Background}" alt="background login" />
-          </div>
+        </div>
+        <div className="justify-center items-center hidden xl:flex mr-6">
+          <img src="../../assets/Background.png" alt="background login" />
         </div>
       </div>
     </div>
