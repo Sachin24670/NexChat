@@ -30,27 +30,20 @@ function App() {
         const response = await apiClient.get(GET_USER_INFO, {
           withCredentials: true,
         });
-
-        if(response.status=== 200 && response.data.UserId){
-          setUserInfo(response.data)
-          
-        }else{
-          setUserInfo(undefined)
+        if (response.status === 200 && response.data.UserId) {
+          setUserInfo(response.data);
+        } else {
+          setUserInfo(null);
         }
       } catch (error) {
-        setUserInfo(undefined)
-        console.log(error);
+        setUserInfo(null);
       } finally {
         setLoading(false);
       }
     };
 
-    if (!userInfo) {
-      getUserData();
-    } else {
-      setLoading(false);
-    }
-  }, [userInfo, setUserInfo])
+    getUserData();
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
