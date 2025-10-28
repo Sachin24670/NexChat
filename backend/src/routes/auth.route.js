@@ -5,7 +5,8 @@ import {
   signup,
   updateProfile,
   removeProfileImage,
-  updateProfileImage
+  updateProfileImage,
+  logout
 } from "../controller/auth.controller.js";
 import { verifyToken } from "../middleware/auth.middleware.js"
 import multer from "multer"
@@ -15,7 +16,7 @@ const router = express.Router();
 
 router.post("/signup", signup); 
 router.post("/login", login);
-router.post("/logout", login);
+router.post("/logout", logout);
 router.get("/user-info", verifyToken, getUserInfo);
 router.post(
   "/update-profile",

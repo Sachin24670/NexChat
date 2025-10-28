@@ -78,15 +78,6 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async(req,res)=>{
-  try {
-    res.cookie("jwt_token","",{maxAge:0})
-    res.status(200).json({ message: "Successfully logout" });
-
-  } catch (error) {
-     console.log("Internal Server Error");
-  }
-}
 
 export const getUserInfo = async (req, res) => {
   try {
@@ -182,5 +173,15 @@ export const removeProfileImage = async (req, res) => {
   } catch (error) {
     console.log(`Internal Error ${error}`);
     res.status(500).json({ message: `Internal Server Error` });
+  }
+};
+
+
+export const logout = async (req, res) => {
+  try {
+    res.cookie("jwt_token", "", { maxAge: 1, secure:true , sameSite: true });
+    res.status(200).json({ message: "logout Successfull" });
+  } catch (error) {
+    console.log("Internal Server Error",error.message);
   }
 };

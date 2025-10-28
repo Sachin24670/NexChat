@@ -1,107 +1,127 @@
-import { useAppstore } from '@/store'
-import React, { useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import {IoArrowBack} from "react-icons/io5"
-import { Avatar, AvatarImage } from '@radix-ui/react-avatar'
-import  {getColor } from '@/lib/utils'
-import {FaPlus, FaTrash} from "react-icons/fa"
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { toast } from 'sonner'
-import { apiClient } from '@/lib/api.client'
-import { HOST, REMOVE_PROFILE_IMAGE_ROUTE, UPDATE_PROFILE_IMAGE_ROUTE, UPDATE_PROFILE_ROUTE } from '@/lib/constants'
+import { useAppstore } from "@/store";
+import { useNavigate } from "react-router-dom";
+import { useRef, useState, useEffect } from "react";
+import { IoArrowBack } from "react-icons/io5";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { getColor } from "@/lib/utils";
+import { FaPlus, FaTrash } from "react-icons/fa";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { apiClient } from "@/lib/api.client";
+import {
+  HOST,
+  REMOVE_PROFILE_IMAGE_ROUTE,
+  UPDATE_PROFILE_IMAGE_ROUTE,
+  UPDATE_PROFILE_ROUTE,
+} from "@/lib/constants";
 
 const Profile = () => {
-  const navigate = useNavigate()
-  const {userInfo,setUserInfo} = useAppstore()
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [profileImage, setProfileImage] = useState(null)
-  const [hovered, setHovered] = useState(false)
+  const navigate = useNavigate();
+  const { userInfo = {}, setUserInfo } = useAppstore();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+  const [profileInitial, setProfileInitial] = useState("?");
+  const [hovered, setHovered] = useState(false);
+  const fileInputRef = useRef(null);
 
-  const validateProfile = ()=>{
-    if(!firstName){
-      toast.error("First Name is required")
-      return false
-    }if(!lastName){
-      toast.error("Last Name is required")
+  useEffect(() => {
+    if (userInfo.profileSetup) {
+      setFirstName(userInfo.firstName || "");
+      setLastName(userInfo.lastName || "");
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (userInfo.profileImage) {
+      setProfileImage(`${HOST}/${userInfo.profileImage}`);
+    } else {
+      setProfileImage(null);
+    }
+  }, [userInfo.profileImage]);
+
+  useEffect(() => {
+    if (firstName && firstName.length > 0) {
+      setProfileInitial(firstName.charAt(0).toUpperCase());
+    } else if (userInfo.email && userInfo.email.length > 0) {
+      setProfileInitial(userInfo.email.charAt(0).toUpperCase());
+    } else {
+      setProfileInitial("?");
+    }
+  }, [firstName, userInfo.email]);
+
+  const validateProfile = () => {
+    if (!firstName) {
+      toast.error("First Name is required");
       return false;
     }
-    return true
-  }
-  const saveChanges = async()=>{
-    if(validateProfile()){
+    if (!lastName) {
+      toast.error("Last Name is required");
+      return false;
+    }
+    return true;
+  };
+
+  const saveChanges = async () => {
+    if (validateProfile()) {
       try {
-        const response = await apiClient.post(UPDATE_PROFILE_ROUTE,
-          {firstName , lastName},
-          {withCredentials:true}
-        )
-        if(response.status===200 && response.data){
-          setUserInfo({...response.data})
-          toast.success("Profile Updated Successfully")
-          navigate("/chat")
+        const response = await apiClient.post(
+          UPDATE_PROFILE_ROUTE,
+          { firstName, lastName },
+          { withCredentials: true }
+        );
+        if (response.status === 200 && response.data) {
+          setUserInfo({ ...response.data });
+          toast.success("Profile Updated Successfully");
+          navigate("/chat");
         }
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) {}
     }
+  };
 
-  }
-  const handleNavigate = ()=>{
-    if(userInfo.profileSetup){
-      navigate("/chat")
-    }else{
-      toast.error("PLease Setup the Profile")
+  const handleNavigate = () => {
+    if (userInfo.profileSetup) {
+      navigate("/chat");
+    } else {
+      toast.error("PLease Setup the Profile");
     }
+  };
 
-  }
-  const fileInputRef = useRef(null)
+  const handleFileInputClick = () => {
+    fileInputRef.current.click();
+  };
 
-useEffect(() => {
-  if (userInfo.profileSetup) {
-    setFirstName(userInfo.firstName || "");
-    setLastName(userInfo.lastName || "");
-  }if(userInfo.profileImage){
-    setProfileImage(`${HOST}/${userInfo.profileImage}`)
-  }
-  
-
-}, [userInfo]);
-
-  const handleFileInputClick = ()=>{
-    fileInputRef.current.click()
-  }
-
-  const handleImageChange = async(event)=>{
-    const file = event.target.files[0]
-    if(file){
-      const formData = new FormData()
-      formData.append("profile-image",file)
-      const response = await apiClient.post(UPDATE_PROFILE_IMAGE_ROUTE, formData , {withCredentials:true})
-      console.log(response)
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("profile-image", file);
+      const response = await apiClient.post(
+        UPDATE_PROFILE_IMAGE_ROUTE,
+        formData,
+        { withCredentials: true }
+      );
       if (response.status === 200 && response.data.profileImage) {
-         setUserInfo({ ...userInfo, profileImage: response.data.profileImage });
-         setProfileImage(response.data.profileImage); 
-        toast.success("Image Update Successfully")
-      }}
-
-
-    }
-
-  const handleDeleteImage = async()=>{
-    try {
-      const response = await apiClient.delete(REMOVE_PROFILE_IMAGE_ROUTE,{withCredentials:true})
-      if(response.status===200){
-        setUserInfo({...userInfo,profileImage:null})
-        toast.success("Image Removed Successfully")
-        setProfileImage(null)
+        setUserInfo({ ...userInfo, profileImage: response.data.profileImage });
+        setProfileImage(`${HOST}/${response.data.profileImage}`);
+        toast.success("Image Updated Successfully");
       }
-    } catch (error) {
-      console.log(error)
     }
-  }
+  };
 
+  const handleDeleteImage = async () => {
+    try {
+      const response = await apiClient.delete(REMOVE_PROFILE_IMAGE_ROUTE, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        setUserInfo({ ...userInfo, profileImage: null });
+        setProfileImage(null);
+        toast.success("Image Removed Successfully");
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="h-[100vh] bg-zinc-800 flex items-center justify-center flex-col gap-10">
@@ -115,9 +135,7 @@ useEffect(() => {
             <div
               className="h-full w-32 md:w-48 md:h-48 relative flex items-center justify-center"
               onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => {
-                setHovered(false);
-              }}
+              onMouseLeave={() => setHovered(false)}
             >
               <Avatar className="h-32 w-32 md:w-48 md:h-48 rounded-full overflow-hidden">
                 {profileImage ? (
@@ -129,12 +147,10 @@ useEffect(() => {
                 ) : (
                   <div
                     className={`uppercase h-32 w-32 md:w-48 md:h-48 text-5xl border-[3px] flex justify-center items-center rounded-full ${getColor(
-                      userInfo.firstName
+                      firstName
                     )}`}
                   >
-                    {firstName
-                      ? firstName.split("").shift()
-                      : userInfo.email.split("").shift()}
+                    {profileInitial}
                   </div>
                 )}
               </Avatar>
@@ -161,15 +177,15 @@ useEffect(() => {
                 accept=".png, .jpg, .jpeg, .svg, .webp"
               />
             </div>
-            <div className="flex min-w-32 md:min-win-64 flex-col gap-5 text-white items-center justify-center">
+            <div className="flex min-w-32 md:min-w-64 flex-col gap-5 text-white items-center justify-center">
               <div className="w-full">
                 <Input
                   placeholder="Email"
                   type="email"
                   disabled
-                  value={userInfo.email}
+                  value={userInfo.email || ""}
                   className="rounded-lg p-3 border-none bg-gray-500/60 text-white"
-                ></Input>
+                />
               </div>
               <div className="w-full">
                 <Input
@@ -178,16 +194,16 @@ useEffect(() => {
                   value={firstName}
                   className="rounded-lg p-3 border-none bg-gray-500/60 text-white"
                   onChange={(e) => setFirstName(e.target.value)}
-                ></Input>
+                />
               </div>
               <div className="w-full">
                 <Input
                   placeholder="Last Name"
                   type="text"
                   value={lastName}
-                  className="rounded-lg p-3 border-none bg-gray-500/60 text-white "
+                  className="rounded-lg p-3 border-none bg-gray-500/60 text-white"
                   onChange={(e) => setLastName(e.target.value)}
-                ></Input>
+                />
               </div>
             </div>
           </div>
@@ -203,6 +219,6 @@ useEffect(() => {
       </div>
     </div>
   );
-}
+};
 
-export default Profile
+export default Profile;

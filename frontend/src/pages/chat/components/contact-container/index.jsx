@@ -15,6 +15,9 @@
 //           fill="url(#paint0_linear)"
 //         />
 
+import NewDM from "./components/new-dm";
+import ProfileInfo from "./components/profile-info";
+
 //         {/* Three chat dots */}
 //         <circle cx="40" cy="45" r="5" fill="white" />
 //         <circle cx="52" cy="45" r="5" fill="white" />
@@ -99,13 +102,14 @@ const Title = ({text})=>{
 
 const ContactContainer = () => {
   return (
-    <div className="relative md:w-[35vw] lg:w-[32vw] xl:w-[20vw] bg-neutral-800 border-r-2 border-gray-400 p-4 ">
+    <div className="relative md:w-[35vw] lg:w-[32vw] xl:w-[20vw] bg-neutral-800 border-r-2 border-gray-400 ">
       <div className="pt-3">
         <Logo />
       </div>
       <div className="my-5">
         <div className="flex items-center justify-between pr-10">
           <Title text="Direct Messages" />
+          <NewDM />
         </div>
       </div>
 
@@ -114,6 +118,7 @@ const ContactContainer = () => {
           <Title text="Channels" />
         </div>
       </div>
+      <ProfileInfo />
     </div>
   );
 };
