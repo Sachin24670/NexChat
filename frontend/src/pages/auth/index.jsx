@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger, } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -10,99 +10,96 @@ import { useNavigate } from "react-router-dom";
 import { useAppstore } from "@/store";
 
 const Auth = () => {
-    const {setUserInfo} = useAppstore()
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("")
+  const { setUserInfo } = useAppstore();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
-    const navigate = useNavigate()
-    const validateSignup = () => {
-      if (!firstName.length) {
-        toast.error("First Name is Required");
-        return false;
-      }
-      if (!email.length) {
-        toast.error("Email is Required");
-        return false;
-      }if (!password.length) {
-        toast.error("Password is Required");
-        return false;
-      }if (password !== confirmPassword) {
-        toast.error("Password and confirm password should be same");
-        return false;
-      }
-      return true
-      
-    };
-
-    const validateLogin=()=>{
-      if(!email.length){
-        toast.error("Email is required")
-        return false
-      }if (!password.length) {
-        toast.error("Password is required");
-        return false;
-
-      }return true
+  const navigate = useNavigate();
+  const validateSignup = () => {
+    if (!firstName.length) {
+      toast.error("First Name is Required");
+      return false;
     }
-
-    const handleLogin =async()=>{
-      if(validateLogin()){
-        try {
-                  const response = await apiClient.post(
-                    LOGIN_ROUTE,
-                    { email, password },
-                    { withCredentials: true }
-                  );
-                  console.log(response)
-                  toast.success("Login Successful")
-
-            if(response.data.user._id){
-              setUserInfo(response.data.user)
-              if(response.data.user.profileSetup){
-                navigate("/chat")
-              }else{
-                navigate("/profile")
-              }
-            }
-            console.log("Login response:", response.data);
-
-        } catch (error) {
-          console.log(error)
-        }
-      }
-
-
+    if (!email.length) {
+      toast.error("Email is Required");
+      return false;
     }
+    if (!password.length) {
+      toast.error("Password is Required");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Password and confirm password should be same");
+      return false;
+    }
+    return true;
+  };
 
-    const handleSignUp = async()=>{
-        if(validateSignup())
-        {
-        try {
-          const response = await apiClient.post(
-            SIGN_UP_ROUTE,
-            { email, password, firstName, lastName },{
-              withCredentials:true
-            }
-          );
-          console.log(response)
-          toast.success("Signup Successfull")
+  const validateLogin = () => {
+    if (!email.length) {
+      toast.error("Email is required");
+      return false;
+    }
+    if (!password.length) {
+      toast.error("Password is required");
+      return false;
+    }
+    return true;
+  };
 
-          if (response.status === 201) {
-             setUserInfo(response.data.user);
+  const handleLogin = async () => {
+    if (validateLogin()) {
+      try {
+        console.log("LOGIN PAYLOAD:", { email, password });
+        const response = await apiClient.post(
+          LOGIN_ROUTE,
+          { email, password },
+          { withCredentials: true }
+        );
+        console.log(response);
+        toast.success("Login Successful");
 
-            navigate("/profile")
+        if (response.data.user._id) {
+          setUserInfo(response.data.user);
+          if (response.data.user.profileSetup) {
+            navigate("/chat");
+          } else {
+            navigate("/profile");
           }
-        } catch (error) {
-          console.error(error)
         }
-        }
-        
-
+        console.log("Login response:", response.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
-    
+  };
+
+  const handleSignUp = async () => {
+    if (validateSignup()) {
+      try {
+        const response = await apiClient.post(
+          SIGN_UP_ROUTE,
+          { email, password, firstName, lastName },
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(response);
+        toast.success("Signup Successfull");
+
+        if (response.status === 201) {
+          setUserInfo(response.data.user);
+
+          navigate("/profile");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   return (
     <div className="h-[100vh] w-[100vw] flex items-center justify-center">
@@ -197,7 +194,11 @@ const Auth = () => {
           </div>
         </div>
         <div className="justify-center items-center hidden xl:flex mr-6">
-          <img src="../../assets/Background.png" alt="background login" className="rounded-4xl"/>
+          <img
+            src="../../assets/Background.png"
+            alt="background login"
+            className="rounded-4xl"
+          />
         </div>
       </div>
     </div>
