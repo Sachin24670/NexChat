@@ -1,6 +1,6 @@
 import { HOST } from "@/lib/constants";
 import { useAppstore } from "@/store";
-import { createContext, useContext, useEffect, useRef } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import { io } from "socket.io-client";
 
 const SocketContext = createContext(null);
@@ -8,30 +8,45 @@ const SocketContext = createContext(null);
 export const useSocket = () => useContext(SocketContext);
 
 export const SocketProvider = ({ children }) => {
-  const socket = useRef(null);
+  const [socket, setSocket] = useState(null);
   const { userInfo } = useAppstore();
 
   useEffect(() => {
-    if (!userInfo) return;
+    if (!userInfo?._id) return;
 
-    socket.current = io(HOST, {
+    const newSocket = io(HOST, {
       withCredentials: true,
-      query: { userId: userInfo },
+      query: { userId: userInfo._id },
     });
+    setSocket(newSocket);
 
-    socket.current.on("connect", () => {
+    newSocket.on("connect", () => {
       console.log("Connected to Socket Server");
     });
 
+    const handleReceiveMessage = (message) => {
+      const { selectedChatData } = useAppstore.getState();
+
+      if (
+        selectedChatData &&
+        (selectedChatData._id === message.sender._id ||
+          selectedChatData._id === message.recipient._id)
+      ) {
+        console.log("message received", message);
+        useAppstore.getState().addMessage(message);
+      }
+    };
+
+    newSocket.on("receivedMessage", handleReceiveMessage);
+
     return () => {
-      socket.current?.disconnect();
-      socket.current = null;
+      newSocket.off("receivedMessage", handleReceiveMessage);
+      newSocket.disconnect();
+      setSocket(null);
     };
   }, [userInfo]);
 
   return (
-    <SocketContext.Provider value={socket.current}>
-      {children}
-    </SocketContext.Provider>
+    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );
 };
