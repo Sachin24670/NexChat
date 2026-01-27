@@ -86,7 +86,7 @@ export const getUserInfo = async (req, res) => {
       return res.status(200).json({message:"Invalid Credentials"})
     }
     return res.status(200).json({
-        UserId:userData._id,
+        _id:userData._id,
         email:userData.email,
         firstName:userData.firstName,
         lastName:userData.lastName,
@@ -113,7 +113,7 @@ export const updateProfile = async (req, res) => {
 
 
     return res.status(200).json({
-      UserId: userData._id,
+      _id: userData._id,
       email: userData.email,
       firstName: userData.firstName,
       lastName: userData.lastName,

@@ -30,7 +30,7 @@ function App() {
         const response = await apiClient.get(GET_USER_INFO, {
           withCredentials: true,
         });
-        if (response.status === 200 && response.data.UserId) {
+        if (response.status === 200 && response.data._id) {
           setUserInfo(response.data);
         } else {
           setUserInfo(null);
