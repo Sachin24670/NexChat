@@ -17,6 +17,7 @@ export const SocketProvider = ({ children }) => {
     const newSocket = io(HOST, {
       withCredentials: true,
       query: { userId: userInfo._id },
+ },
     });
     setSocket(newSocket);
 
