@@ -4,7 +4,8 @@ import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import { GrAttachment } from "react-icons/gr";
 import { IoSend } from "react-icons/io5";
-import { RiEmojiStickerFill, RiEmojiStickerLine } from "react-icons/ri";
+import { RiEmojiStickerLine } from "react-icons/ri";
+
 const MessageBar = () => {
   const emojiRef = useRef();
   const [message, setMessage] = useState("");
@@ -34,6 +35,7 @@ const MessageBar = () => {
       console.warn("Socket not connected yet");
       return;
     }
+    if (!message.trim()) return;
 
     if (selectedChatType === "contact") {
       socket.emit("sendMessage", {
@@ -43,28 +45,39 @@ const MessageBar = () => {
         messageType: "text",
         findUrl: undefined,
       });
+      setMessage("");
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const isSendDisabled = !message.trim();
+
   return (
-    <div className="h-[10vh] bg-[#1c1d25] flex justify-center items-center px-8 mb-6 gap-6 ">
-      <div className="flex-1 flex bg-[#2a2b33] rounded-md items-center gap-5 pr-5">
+    <div className="h-[10vh] bg-[#0a0c14] flex justify-center items-center px-3 md:px-8 mb-4 gap-3 md:gap-6">
+      <div className="flex-1 flex bg-[#12141c] border border-[#1e2030] rounded-xl items-center gap-3 md:gap-5 pr-3 md:pr-5">
         <input
           type="text"
-          className="flex-1 p-5 bg-transparent rounded-md focus:border-none focus:outline-none"
+          className="flex-1 p-3 md:p-5 bg-transparent rounded-xl focus:border-none focus:outline-none text-gray-100 placeholder:text-gray-500 text-sm md:text-base"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Enter Message"
         />
-        <button className="text-neutral-500 focus:border-none focus:outline-none hover:text-white duration-100 transition-all  cursor-pointer">
-          <GrAttachment className="text-2xl " />
+        <button className="text-gray-500 focus:border-none focus:outline-none hover:text-gray-200 duration-200 transition-all cursor-pointer p-1.5 rounded-lg hover:bg-[#1a1c28]">
+          <GrAttachment className="text-xl md:text-2xl" />
         </button>
         <div className="relative">
           <button
-            className="text-neutral-500 focus:border-none focus:outline-none hover:text-white duration-100 transition-all  cursor-pointer"
+            className="text-gray-500 focus:border-none focus:outline-none hover:text-gray-200 duration-200 transition-all cursor-pointer p-1.5 rounded-lg hover:bg-[#1a1c28]"
             onClick={() => setEmojiPickerOpen(true)}
           >
-            <RiEmojiStickerLine className="text-2xl " />
+            <RiEmojiStickerLine className="text-xl md:text-2xl" />
           </button>
           <div className="absolute bottom-16 right-0" ref={emojiRef}>
             <EmojiPicker
@@ -77,10 +90,15 @@ const MessageBar = () => {
         </div>
       </div>
       <button
-        className="bg-[#8417ff] rounded-md flex items-center justify-center p-5 focus:border-none focus:outline-none hover:bg-[#38096e] focus:bg-[#38096e] hover:text-white duration-100 transition-all  cursor-pointer"
+        className={`rounded-xl flex items-center justify-center p-3 md:p-4 focus:border-none focus:outline-none transition-all duration-200 ${
+          isSendDisabled
+            ? "bg-[#1a1c28] text-gray-600 cursor-not-allowed opacity-50"
+            : "bg-[#00B4D8] hover:bg-[#0077B6] text-white cursor-pointer shadow-lg shadow-[#00B4D8]/20"
+        }`}
         onClick={handleSendMessage}
+        disabled={isSendDisabled}
       >
-        <IoSend className="text-2xl " />
+        <IoSend className="text-xl md:text-2xl" />
       </button>
     </div>
   );

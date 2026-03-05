@@ -7,10 +7,8 @@ import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -59,38 +57,38 @@ const NewDM = () => {
       <Tooltip>
         <TooltipTrigger>
           <FaPlus
-            className="text-neutral-400 font-light text-opacity-90 text-start hover:text-neutral-100 cursor-pointer transition-all duration-300"
+            className="text-gray-500 font-light text-opacity-90 text-start hover:text-[#00B4D8] cursor-pointer transition-all duration-300"
             onClick={() => setOpenNewContactModel(true)}
           />
         </TooltipTrigger>
-        <TooltipContent className="bg-[#1c1b1a] border-none mb-2 p-3 text-white">
+        <TooltipContent className="bg-[#1a1c28] border border-[#2a2d3a] mb-2 p-3 text-gray-200">
           <p>Select New Contact</p>
         </TooltipContent>
       </Tooltip>
       <Dialog open={openNewContactModel} onOpenChange={setOpenNewContactModel}>
-        <DialogContent className="bg-[#181920] border-none text-white w-[400px] h-[400px] flex flex-col">
+        <DialogContent className="bg-[#12141c] border border-[#1e2030] text-gray-100 w-[90vw] max-w-[400px] h-[400px] flex flex-col rounded-xl">
           <DialogHeader>
-            <DialogTitle className="mx-auto">Please Select Contact</DialogTitle>
+            <DialogTitle className="mx-auto text-gray-100">Please Select Contact</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
           <div className="">
             <Input
               placeholder="Search Contacts"
-              className="rounded-lg p-6 bg-[#2c2e3b] border-none"
+              className="rounded-lg p-6 bg-[#1a1c28] border-[#2a2d3a] text-gray-100 placeholder:text-gray-500 focus:border-[#00B4D8]"
               onChange={(e) => searchContacts(e.target.value)}
             />
           </div>
-          {searchContacts.length > 0 && (
-            <ScrollArea className="h-[250px] ">
-              <div className="flex flex-col gap-5 ">
+          {searchedContacts.length > 0 && (
+            <ScrollArea className="h-[250px]">
+              <div className="flex flex-col gap-5">
                 {searchedContacts.map((contact) => (
                   <div
                     key={contact._id}
-                    className="flex gap-3 items-center cursor-pointer"
+                    className="flex gap-3 items-center cursor-pointer hover:bg-[#1a1c28] p-2 rounded-lg transition-colors duration-200"
                     onClick={() => selectNewContact(contact)}
                   >
-                    <div className="w-16 h-16 relative">
-                      <Avatar className="h-16 w-16  rounded-full overflow-hidden">
+                    <div className="w-12 h-12 relative flex-shrink-0">
+                      <Avatar className="h-12 w-12 rounded-full overflow-hidden">
                         {contact.profileImage ? (
                           <AvatarImage
                             src={`${HOST}/${contact.profileImage}`}
@@ -99,7 +97,7 @@ const NewDM = () => {
                           />
                         ) : (
                           <div
-                            className={`uppercase h-16 w-16 text-5xl border-[3px] flex justify-center items-center rounded-full ${getColor(
+                            className={`uppercase h-12 w-12 text-2xl border-[2px] flex justify-center items-center rounded-full ${getColor(
                               contact.firstName
                             )}`}
                           >
@@ -110,12 +108,14 @@ const NewDM = () => {
                         )}
                       </Avatar>
                     </div>
-                    <div className="flex flex-col ">
-                      {contact.firstName && contact.lastName
-                        ? `${contact.firstName} ${contact.lastName}`
-                        : ""}
-                      <span>
-                        <span className="text-xs">{contact.email}</span>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-gray-100 text-sm font-medium truncate">
+                        {contact.firstName && contact.lastName
+                          ? `${contact.firstName} ${contact.lastName}`
+                          : ""}
+                      </span>
+                      <span className="text-gray-500 text-xs truncate">
+                        {contact.email}
                       </span>
                     </div>
                   </div>
@@ -124,11 +124,11 @@ const NewDM = () => {
             </ScrollArea>
           )}
           {searchedContacts.length <= 0 && (
-            <div className="flex-1 md:bg-[#1c1d25] md:flex flex-col justify-center items-center duration-1000 transition-all rounded-md">
+            <div className="flex-1 bg-[#0a0c14] flex flex-col justify-center items-center duration-1000 transition-all rounded-lg">
               <Lottie
                 animationData={Loader}
                 loop={true}
-                style={{ width: 150, height: 150 }}
+                style={{ width: 120, height: 120 }}
                 rendererSettings={{
                   preserveAspectRatio: "xMidYMid slice",
                   clearCanvas: true,
@@ -136,11 +136,11 @@ const NewDM = () => {
                   hideOnTransparent: true,
                 }}
               />
-              <div className="text-opacity-80 text-white flex flex-col gap-5 items-center mt-5 lg:text-xl text-3xl transition-all duration-300 text-center">
+              <div className="text-opacity-80 text-gray-300 flex flex-col gap-3 items-center mt-3 text-lg transition-all duration-300 text-center">
                 <h3 className="poppins-medium">
-                  Hi<span className="text-purple-500">! </span>
+                  Hi<span className="text-[#00B4D8]">! </span>
                   Search New
-                  <span className="text-purple-500"> Contact. </span>
+                  <span className="text-[#00B4D8]"> Contact. </span>
                 </h3>
               </div>
             </div>

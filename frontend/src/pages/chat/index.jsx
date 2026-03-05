@@ -17,8 +17,10 @@ const Chat = () => {
   }, [userInfo, navigate]);
 
   return (
-    <div className="flex h-[100vh] text-white overflow-hidden ">
-      <ContactConatiner />
+    <div className="flex h-[100vh] text-gray-100 overflow-hidden bg-[#0b0d14]">
+      <div className={`${selectedChatType !== undefined ? "hidden md:block" : "w-full md:w-auto"}`}>
+        <ContactConatiner />
+      </div>
       {selectedChatType === undefined ? (
         <EmptyChatContainer />
       ) : (

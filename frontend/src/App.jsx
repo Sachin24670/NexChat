@@ -46,7 +46,36 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-overlay">
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 100 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ marginBottom: "24px", animation: "pulse-glow 2s ease-in-out infinite" }}
+        >
+          <path
+            d="M20 20C20 12.268 26.268 6 34 6H66C73.732 6 80 12.268 80 20V58C80 65.732 73.732 72 66 72H50L35 88L36 72H34C26.268 72 20 65.732 20 58V20Z"
+            fill="url(#loadGrad)"
+          />
+          <circle cx="40" cy="45" r="4" fill="white" />
+          <circle cx="50" cy="45" r="4" fill="white" />
+          <circle cx="60" cy="45" r="4" fill="white" />
+          <defs>
+            <linearGradient id="loadGrad" x1="20" y1="6" x2="80" y2="88" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#818cf8" />
+              <stop offset="1" stopColor="#6366f1" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div className="loading-spinner" style={{ marginBottom: "20px" }}></div>
+        <p style={{ color: "#94a3b8", fontSize: "15px", fontWeight: 500, letterSpacing: "0.5px" }}>
+          Please Wait Connecting to The Server
+        </p>
+      </div>
+    );
   }
 
   return (
