@@ -17,7 +17,7 @@ const Chat = () => {
   }, [userInfo, navigate]);
 
   return (
-    <div className="flex h-[100vh] text-gray-100 overflow-hidden bg-[#0b0d14]">
+    <div className="flex h-[100vh] text-gray-100 overflow-hidden bg-[#09090b]">
       <div className={`${selectedChatType !== undefined ? "hidden md:block" : "w-full md:w-auto"}`}>
         <ContactConatiner />
       </div>

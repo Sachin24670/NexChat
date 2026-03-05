@@ -1,10 +1,9 @@
 import { useAppstore } from "@/store";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
-import { IoArrowBack } from "react-icons/io5";
+import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { getColor } from "@/lib/utils";
-import { FaPlus, FaTrash } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -131,21 +130,27 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0d14] flex items-center justify-center flex-col gap-8 p-4 sm:p-8">
-      <div className="flex flex-col gap-8 w-full max-w-[600px]">
-        <div>
-          <IoArrowBack
-            className="text-3xl lg:text-4xl text-gray-300 cursor-pointer hover:text-[#818cf8] transition-colors duration-200"
+    <div className="min-h-screen bg-[#09090b] flex items-center justify-center flex-col gap-8 p-4 sm:p-8">
+      <div className="flex flex-col gap-6 w-full max-w-[700px]">
+        <div className="flex items-center gap-4">
+          <button
             onClick={handleNavigate}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+            className="p-2 rounded-lg hover:bg-[#1a1a24] text-gray-400 hover:text-[#a78bfa] transition-all duration-200 cursor-pointer"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </button>
+          <h1 className="text-2xl font-bold text-gray-100">Edit Profile</h1>
+        </div>
+
+        <div className="bg-[#13131a] border border-[#2a2a3a] rounded-2xl p-6 sm:p-10 shadow-[0_0_50px_rgba(124,58,237,0.06)]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex justify-center">
               <div
-                className="h-32 w-32 md:w-40 md:h-40 relative flex items-center justify-center"
+                className="h-36 w-36 md:w-44 md:h-44 relative flex items-center justify-center"
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
               >
-                <Avatar className="h-32 w-32 md:w-40 md:h-40 rounded-full overflow-hidden">
+                <Avatar className="h-36 w-36 md:w-44 md:h-44 rounded-full overflow-hidden">
                   {profileImage ? (
                     <AvatarImage
                       src={profileImage}
@@ -154,7 +159,7 @@ const Profile = () => {
                     />
                   ) : (
                     <div
-                      className={`uppercase h-32 w-32 md:w-40 md:h-40 text-5xl border-[3px] flex justify-center items-center rounded-full ${getColor(
+                      className={`uppercase h-36 w-36 md:w-44 md:h-44 text-5xl border-[3px] flex justify-center items-center rounded-full ${getColor(
                         firstName
                       )}`}
                     >
@@ -170,9 +175,9 @@ const Profile = () => {
                     }
                   >
                     {profileImage ? (
-                      <FaTrash className="text-white text-2xl cursor-pointer" />
+                      <Trash2 className="text-white w-6 h-6" />
                     ) : (
-                      <FaPlus className="text-white text-2xl cursor-pointer" />
+                      <Plus className="text-white w-6 h-6" />
                     )}
                   </div>
                 )}
@@ -186,39 +191,42 @@ const Profile = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-4 text-gray-100 items-center justify-center">
+            <div className="flex flex-col gap-5 text-gray-100 justify-center">
               <div className="w-full">
+                <label className="text-xs text-gray-500 mb-1.5 block pl-1">Email</label>
                 <Input
                   placeholder="Email"
                   type="email"
                   disabled
                   value={userInfo.email || ""}
-                  className="rounded-lg p-3 border-[#262a40] bg-[#1a1d2e] text-gray-400 placeholder:text-gray-500"
+                  className="rounded-lg p-3 border-[#2a2a3a] bg-[#1a1a24] text-gray-400 placeholder:text-gray-600"
                 />
               </div>
               <div className="w-full">
+                <label className="text-xs text-gray-500 mb-1.5 block pl-1">First Name</label>
                 <Input
                   placeholder="First Name"
                   type="text"
                   value={firstName}
-                  className="rounded-lg p-3 border-[#262a40] bg-[#1a1d2e] text-gray-100 placeholder:text-gray-500 focus:border-[#818cf8]"
+                  className="rounded-lg p-3 border-[#2a2a3a] bg-[#1a1a24] text-gray-100 placeholder:text-gray-600 focus:border-[#a78bfa]"
                   onChange={(e) => setFirstName(e.target.value)}
                 />
               </div>
               <div className="w-full">
+                <label className="text-xs text-gray-500 mb-1.5 block pl-1">Last Name</label>
                 <Input
                   placeholder="Last Name"
                   type="text"
                   value={lastName}
-                  className="rounded-lg p-3 border-[#262a40] bg-[#1a1d2e] text-gray-100 placeholder:text-gray-500 focus:border-[#818cf8]"
+                  className="rounded-lg p-3 border-[#2a2a3a] bg-[#1a1a24] text-gray-100 placeholder:text-gray-600 focus:border-[#a78bfa]"
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
             </div>
           </div>
-          <div className="w-full mt-6">
+          <div className="w-full mt-8">
             <Button
-              className="h-11 w-full bg-[#6366f1] hover:bg-[#4f46e5] text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-11 w-full bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={saveChanges}
               disabled={isSaving}
             >

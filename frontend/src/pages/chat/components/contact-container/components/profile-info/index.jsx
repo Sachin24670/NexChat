@@ -3,8 +3,7 @@ import { HOST, LOGOUT_ROUTE } from "@/lib/constants";
 import { useAppstore } from "@/store";
 import { getColor } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { FiEdit2 } from "react-icons/fi";
-import { IoPowerSharp } from "react-icons/io5";
+import { Pencil, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "@/lib/api.client";
 import { toast } from "sonner";
@@ -34,7 +33,7 @@ const ProfileInfo = () => {
   };
 
   return (
-    <div className="absolute bottom-0 h-20 flex items-center justify-between w-full bg-[#12141c] border-t border-[#1e2030] px-5 md:px-8">
+    <div className="absolute bottom-0 h-20 flex items-center justify-between w-full bg-[#111118] border-t border-[#1e1e2a] px-5 md:px-8">
       <div className="flex gap-3 items-center justify-center min-w-0">
         <div className="w-12 h-12 relative flex-shrink-0">
           <Avatar className="h-12 w-12 rounded-full overflow-hidden">
@@ -66,20 +65,20 @@ const ProfileInfo = () => {
       <div className="flex gap-4 flex-shrink-0">
         <Tooltip>
           <TooltipTrigger>
-            <FiEdit2
-              className="text-[#00B4D8] text-lg font-medium cursor-pointer hover:text-[#0077B6] transition-colors duration-200"
+            <Pencil
+              className="w-[18px] h-[18px] text-[#a78bfa] cursor-pointer hover:text-[#8b5cf6] transition-colors duration-200"
               onClick={() => navigate("/profile")}
             />
           </TooltipTrigger>
-          <TooltipContent className="bg-[#1a1c28] border border-[#2a2d3a] text-gray-200">
+          <TooltipContent className="bg-[#1a1a24] border border-[#2a2a3a] text-gray-200">
             <p>Edit Profile</p>
           </TooltipContent>
         </Tooltip>
 
         <Tooltip>
           <TooltipTrigger>
-            <IoPowerSharp
-              className={`text-lg font-medium transition-colors duration-200 ${
+            <LogOut
+              className={`w-[18px] h-[18px] transition-colors duration-200 ${
                 isLoggingOut
                   ? "text-gray-600 cursor-not-allowed"
                   : "text-red-400 cursor-pointer hover:text-red-300"
@@ -87,7 +86,7 @@ const ProfileInfo = () => {
               onClick={logOut}
             />
           </TooltipTrigger>
-          <TooltipContent className="bg-[#1a1c28] border border-[#2a2d3a] text-gray-200">
+          <TooltipContent className="bg-[#1a1a24] border border-[#2a2a3a] text-gray-200">
             <p>Logout</p>
           </TooltipContent>
         </Tooltip>

@@ -65,8 +65,8 @@ function App() {
           <circle cx="60" cy="45" r="4" fill="white" />
           <defs>
             <linearGradient id="loadGrad" x1="20" y1="6" x2="80" y2="88" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#818cf8" />
-              <stop offset="1" stopColor="#6366f1" />
+              <stop stopColor="#a78bfa" />
+              <stop offset="1" stopColor="#7c3aed" />
             </linearGradient>
           </defs>
         </svg>

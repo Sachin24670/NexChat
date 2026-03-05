@@ -8,6 +8,7 @@ import { apiClient } from "@/lib/api.client";
 import { LOGIN_ROUTE, SIGN_UP_ROUTE } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
 import { useAppstore } from "@/store";
+import { MessageCircle } from "lucide-react";
 
 const Auth = () => {
   const { setUserInfo } = useAppstore();
@@ -108,53 +109,35 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#0b0d14] p-4 sm:p-6">
-      <div className="w-full max-w-[900px] shadow-2xl rounded-2xl grid xl:grid-cols-2 bg-[#141726] border border-[#1e2240]">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#09090b] p-4 sm:p-6">
+      <div className="w-full max-w-[900px] rounded-2xl grid md:grid-cols-2 bg-[#13131a] border border-[#2a2a3a] shadow-[0_0_60px_rgba(124,58,237,0.1)]">
         <div className="flex flex-col items-center justify-center gap-8 p-6 sm:p-10">
           <div className="flex flex-col items-center justify-center w-full">
             <div className="flex items-center justify-center gap-3 mb-2">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 100 100"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M20 20C20 12.268 26.268 6 34 6H66C73.732 6 80 12.268 80 20V58C80 65.732 73.732 72 66 72H50L35 88L36 72H34C26.268 72 20 65.732 20 58V20Z"
-                  fill="url(#authGrad)"
-                />
-                <circle cx="40" cy="45" r="4" fill="white" />
-                <circle cx="50" cy="45" r="4" fill="white" />
-                <circle cx="60" cy="45" r="4" fill="white" />
-                <defs>
-                  <linearGradient id="authGrad" x1="20" y1="6" x2="80" y2="88" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#818cf8" />
-                    <stop offset="1" stopColor="#6366f1" />
-                  </linearGradient>
-                </defs>
-              </svg>
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#a78bfa] to-[#7c3aed] flex items-center justify-center">
+                <MessageCircle className="w-5 h-5 text-white" />
+              </div>
               <h1 className="text-4xl sm:text-5xl font-bold text-gray-100">Welcome</h1>
             </div>
             <div className="font-medium text-center mt-1">
-              <p className="text-gray-400 text-sm">Fill in the details to get started</p>
+              <p className="text-gray-500 text-sm">Fill in the details to get started</p>
             </div>
             <div className="flex items-center justify-center w-full mt-6">
               <Tabs className="w-full sm:w-3/4" defaultValue="login">
-                <TabsList className="bg-transparent rounded-none w-full flex border-b border-[#1e2240]">
+                <TabsList className="bg-transparent rounded-none w-full flex border-b border-[#2a2a3a]">
                   <TabsTrigger
                     value="login"
-                    className="text-gray-500 border-b-2 border-b-transparent rounded-none flex-1 
-                   data-[state=active]:text-[#818cf8] data-[state=active]:font-semibold 
-                   data-[state=active]:border-b-[#818cf8] p-4 transition-all duration-300"
+                    className="text-gray-500 border-b-2 border-b-transparent rounded-none flex-1
+                   data-[state=active]:text-[#a78bfa] data-[state=active]:font-semibold
+                   data-[state=active]:border-b-[#a78bfa] p-4 transition-all duration-300"
                   >
                     Login
                   </TabsTrigger>
                   <TabsTrigger
                     value="signup"
-                    className="text-gray-500 border-b-2 border-b-transparent rounded-none flex-1 
-                   data-[state=active]:text-[#818cf8] data-[state=active]:font-semibold 
-                   data-[state=active]:border-b-[#818cf8] p-3 transition-all duration-300"
+                    className="text-gray-500 border-b-2 border-b-transparent rounded-none flex-1
+                   data-[state=active]:text-[#a78bfa] data-[state=active]:font-semibold
+                   data-[state=active]:border-b-[#a78bfa] p-3 transition-all duration-300"
                   >
                     Sign Up
                   </TabsTrigger>
@@ -163,17 +146,17 @@ const Auth = () => {
                   <Input
                     placeholder="Email"
                     type="email"
-                    className="rounded-full p-5 bg-[#1a1d2e] border-[#262a40] text-gray-100 placeholder:text-gray-500 focus:border-[#818cf8]"
+                    className="rounded-full p-5 bg-[#1a1a24] border-[#2a2a3a] text-gray-100 placeholder:text-gray-500 focus:border-[#a78bfa]"
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <Input
                     placeholder="Password"
                     type="password"
-                    className="rounded-full p-5 bg-[#1a1d2e] border-[#262a40] text-gray-100 placeholder:text-gray-500 focus:border-[#818cf8]"
+                    className="rounded-full p-5 bg-[#1a1a24] border-[#2a2a3a] text-gray-100 placeholder:text-gray-500 focus:border-[#a78bfa]"
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <Button
-                    className="rounded-full p-5 bg-[#6366f1] hover:bg-[#4f46e5] text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-full p-5 bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleLogin}
                     disabled={isSubmitting}
                   >
@@ -195,36 +178,36 @@ const Auth = () => {
                     <Input
                       placeholder="First Name"
                       type="text"
-                      className="rounded-full p-5 bg-[#1a1d2e] border-[#262a40] text-gray-100 placeholder:text-gray-500 focus:border-[#818cf8]"
+                      className="rounded-full p-5 bg-[#1a1a24] border-[#2a2a3a] text-gray-100 placeholder:text-gray-500 focus:border-[#a78bfa]"
                       onChange={(e) => setFirstName(e.target.value)}
                     />
                     <Input
                       placeholder="Last Name"
                       type="text"
-                      className="rounded-full p-5 bg-[#1a1d2e] border-[#262a40] text-gray-100 placeholder:text-gray-500 focus:border-[#818cf8]"
+                      className="rounded-full p-5 bg-[#1a1a24] border-[#2a2a3a] text-gray-100 placeholder:text-gray-500 focus:border-[#a78bfa]"
                       onChange={(e) => setLastName(e.target.value)}
                     />
                   </div>
                   <Input
                     placeholder="Email"
                     type="email"
-                    className="rounded-full p-5 bg-[#1a1d2e] border-[#262a40] text-gray-100 placeholder:text-gray-500 focus:border-[#818cf8]"
+                    className="rounded-full p-5 bg-[#1a1a24] border-[#2a2a3a] text-gray-100 placeholder:text-gray-500 focus:border-[#a78bfa]"
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <Input
                     placeholder="Password"
                     type="password"
-                    className="rounded-full p-5 bg-[#1a1d2e] border-[#262a40] text-gray-100 placeholder:text-gray-500 focus:border-[#818cf8]"
+                    className="rounded-full p-5 bg-[#1a1a24] border-[#2a2a3a] text-gray-100 placeholder:text-gray-500 focus:border-[#a78bfa]"
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <Input
                     placeholder="Confirm Password"
                     type="password"
-                    className="rounded-full p-5 bg-[#1a1d2e] border-[#262a40] text-gray-100 placeholder:text-gray-500 focus:border-[#818cf8]"
+                    className="rounded-full p-5 bg-[#1a1a24] border-[#2a2a3a] text-gray-100 placeholder:text-gray-500 focus:border-[#a78bfa]"
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                   <Button
-                    className="rounded-full p-5 bg-[#6366f1] hover:bg-[#4f46e5] text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-full p-5 bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleSignUp}
                     disabled={isSubmitting}
                   >
@@ -242,9 +225,9 @@ const Auth = () => {
             </div>
           </div>
         </div>
-        <div className="justify-center items-center hidden xl:flex p-6">
+        <div className="justify-center items-center hidden md:flex p-6">
           <img
-            src="../../assets/Background.png"
+            src="/assets/Background.png"
             alt="background login"
             className="rounded-2xl max-h-[500px] object-cover opacity-80"
           />
