@@ -1,10 +1,5 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { MessageCircle, Users, UserCircle, Plus } from "lucide-react";
+import { useAppstore } from "@/store";
 import {
   Dialog,
   DialogContent,
@@ -13,19 +8,29 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import Lottie from "lottie-react";
-import Loader from "@/assets/Loader.json";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { getColor } from "@/lib/utils";
 import { apiClient } from "@/lib/api.client";
 import { HOST, SEARCH_CONTACTS } from "@/lib/constants";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { getColor } from "@/lib/utils";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useAppstore } from "@/store";
+import Lottie from "lottie-react";
+import Loader from "@/assets/Loader.json";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const NewDM = ({ collapsed }) => {
-  const { setSelectedChatType, setSelectedChatData } = useAppstore();
-  const [openNewContactModel, setOpenNewContactModel] = useState(false);
+const BottomNavbar = () => {
+  const {
+    activeMobileTab,
+    setActiveMobileTab,
+    selectedChatType,
+    setSelectedChatType,
+    setSelectedChatData,
+  } = useAppstore();
+  const navigate = useNavigate();
+  const [openNewDm, setOpenNewDm] = useState(false);
   const [searchedContacts, setSearchedContacts] = useState([]);
+
+  if (selectedChatType !== undefined) return null;
 
   const searchContacts = async (searchTerm) => {
     try {
@@ -47,44 +52,59 @@ const NewDM = ({ collapsed }) => {
   };
 
   const selectNewContact = (contact) => {
-    setOpenNewContactModel(false);
+    setOpenNewDm(false);
     setSelectedChatType("contact");
     setSelectedChatData(contact);
     setSearchedContacts([]);
   };
+
+  const tabs = [
+    { id: "chats", label: "Chats", icon: MessageCircle },
+    { id: "channels", label: "Channels", icon: Users },
+    { id: "newchat", label: "New", icon: Plus },
+    { id: "profile", label: "Profile", icon: UserCircle },
+  ];
+
   return (
     <>
-      {collapsed ? (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div
-              className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#a78bfa] to-[#7c3aed] flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity duration-200"
-              onClick={() => setOpenNewContactModel(true)}
-            >
-              <Plus className="w-5 h-5 text-white" />
-            </div>
-          </TooltipTrigger>
-          <TooltipContent
-            side="right"
-            className="bg-[#1a1a24] border border-[#2a2a3a] text-gray-200"
-          >
-            <p>New Message</p>
-          </TooltipContent>
-        </Tooltip>
-      ) : (
-        <Tooltip>
-          <TooltipTrigger>
-            <Plus
-              className="w-4 h-4 text-gray-500 hover:text-[#a78bfa] cursor-pointer transition-all duration-300"
-              onClick={() => setOpenNewContactModel(true)}
-            />
-          </TooltipTrigger>
-          <TooltipContent className="bg-[#1a1a24] border border-[#2a2a3a] mb-2 p-3 text-gray-200">
-            <p>Select New Contact</p>
-          </TooltipContent>
-        </Tooltip>
-      )}
-      <Dialog open={openNewContactModel} onOpenChange={setOpenNewContactModel}>
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#0e0e14] border-t border-[#1e1e2a] md:hidden">
+        <div className="flex items-center justify-around h-16 px-2">
+          {tabs.map((tab) => {
+            const isActive = activeMobileTab === tab.id;
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                className={`flex flex-col items-center justify-center gap-1 flex-1 h-full transition-colors duration-200 cursor-pointer ${
+                  isActive && tab.id !== "newchat"
+                    ? "text-[#a78bfa]"
+                    : "text-gray-500 hover:text-gray-300"
+                }`}
+                onClick={() => {
+                  if (tab.id === "newchat") {
+                    setOpenNewDm(true);
+                  } else if (tab.id === "profile") {
+                    navigate("/profile");
+                  } else {
+                    setActiveMobileTab(tab.id);
+                  }
+                }}
+              >
+                {tab.id === "newchat" ? (
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#a78bfa] to-[#7c3aed] flex items-center justify-center -mt-5 shadow-lg shadow-[#7c3aed]/30">
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                ) : (
+                  <Icon className="w-5 h-5" />
+                )}
+                <span className="text-[10px] font-medium">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <Dialog open={openNewDm} onOpenChange={setOpenNewDm}>
         <DialogContent className="bg-[#111118] border border-[#1e1e2a] text-gray-100 w-[90vw] max-w-[400px] h-[400px] flex flex-col rounded-xl">
           <DialogHeader>
             <DialogTitle className="mx-auto text-gray-100">
@@ -92,14 +112,14 @@ const NewDM = ({ collapsed }) => {
             </DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          <div className="">
+          <div>
             <Input
               placeholder="Search Contacts"
               className="rounded-lg p-6 bg-[#1a1a24] border-[#2a2a3a] text-gray-100 placeholder:text-gray-500 focus:border-[#a78bfa]"
               onChange={(e) => searchContacts(e.target.value)}
             />
           </div>
-          {searchedContacts.length > 0 && (
+          {searchedContacts.length > 0 ? (
             <ScrollArea className="h-[250px]">
               <div className="flex flex-col gap-5">
                 {searchedContacts.map((contact) => (
@@ -143,8 +163,7 @@ const NewDM = ({ collapsed }) => {
                 ))}
               </div>
             </ScrollArea>
-          )}
-          {searchedContacts.length <= 0 && (
+          ) : (
             <div className="flex-1 bg-[#09090b] flex flex-col justify-center items-center duration-1000 transition-all rounded-lg">
               <Lottie
                 animationData={Loader}
@@ -172,4 +191,4 @@ const NewDM = ({ collapsed }) => {
   );
 };
 
-export default NewDM;
+export default BottomNavbar;
