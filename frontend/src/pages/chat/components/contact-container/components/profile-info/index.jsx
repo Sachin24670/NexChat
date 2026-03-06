@@ -52,7 +52,7 @@ const ProfileInfo = ({ collapsed }) => {
               <Avatar className="h-10 w-10 rounded-full overflow-hidden">
                 {userInfo.profileImage ? (
                   <AvatarImage
-                    src={`${HOST}/${userInfo.profileImage}`}
+                    src={userInfo.profileImage}
                     alt="profile"
                     className="object-cover w-full h-full bg-black"
                   />
@@ -111,7 +111,7 @@ const ProfileInfo = ({ collapsed }) => {
           <Avatar className="h-12 w-12 rounded-full overflow-hidden">
             {userInfo.profileImage ? (
               <AvatarImage
-                src={`${HOST}/${userInfo.profileImage}`}
+                src={userInfo.profileImage}
                 alt="profile"
                 className="object-cover w-full h-full bg-black"
               />

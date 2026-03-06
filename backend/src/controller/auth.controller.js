@@ -1,7 +1,11 @@
 import User from "../model/User.model.js";
 import { generateToken } from "../utils/token.util.js";
 import bcrypt from "bcrypt";
-import {renameSync, unlinkSync} from "fs"
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+  getPublicIdFromUrl,
+} from "../utils/cloudinary.js";
 
 export const signup = async (req, res) => {
   const { email, firstName, lastName, password, profilePic } = req.body;
@@ -131,14 +135,12 @@ export const updateProfileImage = async (req, res) => {
       return res.status(400).json({ message: "File is required" });
     }
 
-    const currDate = Date.now();
-    const filename = "uploads/profiles/"+currDate + req.file.originalname;
-
-    renameSync(req.file.path, filename);
+    // Upload buffer to Cloudinary
+    const result = await uploadToCloudinary(req.file.buffer);
 
     const updatedUser = await User.findByIdAndUpdate(
       req.userId,
-      { profileImage: filename },
+      { profileImage: result.secure_url },
       { new: true, runValidators: true }
     );
 
@@ -159,8 +161,13 @@ export const removeProfileImage = async (req, res) => {
     if(!user){
       return res.status(400).json("User not found")
     }
-    if(user){
-      unlinkSync(user.profileImage)
+
+    // Delete image from Cloudinary if it exists
+    if (user.profileImage) {
+      const publicId = getPublicIdFromUrl(user.profileImage);
+      if (publicId) {
+        await deleteFromCloudinary(publicId);
+      }
     }
 
     user.profileImage = null

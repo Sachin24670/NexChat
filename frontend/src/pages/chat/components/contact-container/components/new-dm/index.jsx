@@ -112,7 +112,7 @@ const NewDM = ({ collapsed }) => {
                       <Avatar className="h-12 w-12 rounded-full overflow-hidden">
                         {contact.profileImage ? (
                           <AvatarImage
-                            src={`${HOST}/${contact.profileImage}`}
+                            src={contact.profileImage}
                             alt="profile"
                             className="object-cover w-full h-full bg-black"
                           />

@@ -14,7 +14,7 @@ const ChatHeader = () => {
             <Avatar className="h-10 w-10 md:h-14 md:w-14 rounded-full overflow-hidden">
               {selectedChatData.profileImage ? (
                 <AvatarImage
-                  src={`${HOST}/${selectedChatData.profileImage}`}
+                  src={selectedChatData.profileImage}
                   alt="profile"
                   className="object-cover w-full h-full bg-black"
                 />

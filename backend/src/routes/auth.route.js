@@ -11,7 +11,7 @@ import {
 import { verifyToken } from "../middleware/auth.middleware.js"
 import multer from "multer"
 
-const upload = multer({dest:"uploads/profiles/"})
+const upload = multer({ storage: multer.memoryStorage() })
 const router = express.Router();
 
 router.post("/signup", signup); 

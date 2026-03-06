@@ -35,7 +35,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (userInfo.profileImage) {
-      setProfileImage(`${HOST}/${userInfo.profileImage}`);
+      setProfileImage(userInfo.profileImage);
     } else {
       setProfileImage(null);
     }
@@ -110,7 +110,7 @@ const Profile = () => {
       );
       if (response.status === 200 && response.data.profileImage) {
         setUserInfo({ ...userInfo, profileImage: response.data.profileImage });
-        setProfileImage(`${HOST}/${response.data.profileImage}`);
+        setProfileImage(response.data.profileImage);
         toast.success("Image Updated Successfully");
       }
     }
